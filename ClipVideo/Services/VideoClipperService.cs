@@ -32,7 +32,10 @@ namespace ClipVideo.Services
                 FFmpeg.SetExecutablesPath(ffmpegPath);
 
                 // Download FFmpeg if not present
-                if (!File.Exists(Path.Combine(ffmpegPath, "ffmpeg.exe")))
+                var ffmpegExe = Path.Combine(ffmpegPath, "ffmpeg.exe");
+                var ffprobeExe = Path.Combine(ffmpegPath, "ffprobe.exe");
+
+                if (!File.Exists(ffmpegExe) || !File.Exists(ffprobeExe))
                 {
                     await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, ffmpegPath);
                 }

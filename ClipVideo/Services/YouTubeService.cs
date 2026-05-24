@@ -8,24 +8,25 @@ using Google.Apis.Upload;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
+using YouTubeService = Google.Apis.YouTube.v3.YouTubeService;
 
 namespace ClipVideo.Services
 {
-    public class YouTubeService
+    public class YouTubeUploadService
     {
         private YouTubeService? _youtubeService;
         private UserCredential? _credential;
         private readonly string _credentialsPath;
         private readonly string _clientSecretsPath;
 
-        public YouTubeService()
+        public YouTubeUploadService()
         {
             var appDataPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "ClipVideo"
             );
             Directory.CreateDirectory(appDataPath);
-            
+
             _credentialsPath = Path.Combine(appDataPath, "youtube_credentials");
             _clientSecretsPath = Path.Combine(appDataPath, "client_secrets.json");
         }
@@ -57,7 +58,7 @@ namespace ClipVideo.Services
             {
                 _credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.FromStream(stream).Secrets,
-                    new[] { YouTubeService.Scope.YoutubeUpload, YouTubeService.Scope.Youtube },
+                    new[] { Google.Apis.YouTube.v3.YouTubeService.Scope.YoutubeUpload, Google.Apis.YouTube.v3.YouTubeService.Scope.Youtube },
                     "user",
                     CancellationToken.None,
                     new FileDataStore(_credentialsPath, true)

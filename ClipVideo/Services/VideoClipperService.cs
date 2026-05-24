@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
@@ -66,23 +67,22 @@ namespace ClipVideo.Services
                 var mediaInfo = await FFmpeg.GetMediaInfo(inputPath);
 
                 // Get the video and audio streams
-                var videoStream = mediaInfo.VideoStreams[0]
+                var videoStream = mediaInfo.VideoStreams.FirstOrDefault()
                     ?.SetCodec(VideoCodec.h264)
-                    ?.SetSeek(startTime)
-                    ?.SetOutputFramesCount((int)((duration - startTime).TotalSeconds * mediaInfo.VideoStreams[0].Framerate));
+                    ?.SetSeek(startTime);
 
-                var audioStream = mediaInfo.AudioStreams.Count > 0
-                    ? mediaInfo.AudioStreams[0]
+                var audioStream = mediaInfo.AudioStreams.Any()
+                    ? mediaInfo.AudioStreams.FirstOrDefault()
                         ?.SetCodec(AudioCodec.aac)
                         ?.SetSeek(startTime)
                     : null;
 
                 // Create conversion
                 var conversion = FFmpeg.Conversions.New();
-                
+
                 if (videoStream != null)
                     conversion.AddStream(videoStream);
-                
+
                 if (audioStream != null)
                     conversion.AddStream(audioStream);
 

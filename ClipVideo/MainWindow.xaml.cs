@@ -16,13 +16,13 @@ namespace ClipVideo
         private TimeSpan _endTime = TimeSpan.Zero;
         private string? _clippedVideoPath;
         private readonly VideoClipperService _clipperService;
-        private readonly YouTubeService _youtubeService;
+        private readonly YouTubeUploadService _youtubeService;
 
         public MainWindow()
         {
             InitializeComponent();
             _clipperService = new VideoClipperService();
-            _youtubeService = new YouTubeService();
+            _youtubeService = new YouTubeUploadService();
             InitializeTimer();
         }
 
